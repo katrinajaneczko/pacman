@@ -11,23 +11,26 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
+      
     - name: Set up Python
       uses: actions/setup-python@v4
-
+      with:
+        python-version: '3.10'  
+    
     - name: Install pygbag
       run: pip install pygbag
-
+      
     - name: Build with pygbag
-      run: pygbag .
-
+      working-directory: ./pacman
+      run: pygbag main.py
+    
     - name: Copy assets to build folder
       run: |
-        mkdir -p build/web/assets
-        cp -r assets/* build/web/assets/
-
+        mkdir -p pacman/build/web/assets
+        cp -r pacman/assets/* pacman/build/web/assets/
+    
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build/web
+        publish_dir: ./pacman/build/web
