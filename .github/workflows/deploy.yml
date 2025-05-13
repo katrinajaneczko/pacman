@@ -20,6 +20,11 @@ jobs:
     - name: Install pygbag
       run: pip install pygbag
       
+    - name: Install dependencies
+      run: |
+        pip install pygbag black
+        sudo apt-get update && sudo apt-get install -y ffmpeg
+      
     - name: Build with pygbag
       working-directory: ./pacman
       run: pygbag main.py
