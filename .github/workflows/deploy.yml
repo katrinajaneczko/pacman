@@ -1,0 +1,41 @@
+name: Build/Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [add-gha-deploy-workflow]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  
+    
+    - name: Install pygbag
+      run: pip install pygbag
+      
+    - name: Install dependencies
+      run: |
+        pip install pygbag black
+        sudo apt-get update && sudo apt-get install -y ffmpeg
+      
+    - name: Build with pygbag
+      working-directory: ./pacman
+      run: pygbag main.py
+    
+    - name: Copy assets to build folder
+      run: |
+        mkdir -p pacman/build/web/assets
+        cp -r pacman/assets/* pacman/build/web/assets/
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./pacman/build/web
