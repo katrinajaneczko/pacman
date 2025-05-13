@@ -19,7 +19,7 @@ jobs:
       run: pip install pygbag
 
     - name: Build with pygbag
-      run: pygbag main.py
+      run: pygbag .
 
     - name: Copy assets to build folder
       run: |
